@@ -1,3 +1,0 @@
-﻿scripts/Anaconda/*
-scripts/Anaconda/**/*
-!scripts/Anaconda/anaconda/*
