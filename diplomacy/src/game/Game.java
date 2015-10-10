@@ -213,7 +213,7 @@ public class Game {
 								trip = true;
 							}
 							if(trip){
-								if(selected[0] == country.id){
+								if(selected[0] == country.id && country.army-1 != 0){
 									selected[1] %= (country.army-1);
 									selected[1]++;
 								} else {
