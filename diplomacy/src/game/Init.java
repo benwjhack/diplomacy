@@ -52,23 +52,23 @@ public class Init extends Thread{
 	@SuppressWarnings("unchecked")
 	public static void init2(){
 		
-		Country.players = Setup.players;
-		Country.names = new String[Country.players];
-		for(int i = 0; i != Country.players; i++){
-			Country.names[i] = Setup.mthis.list[i];
+		Territory.players = Setup.players;
+		Territory.names = new String[Territory.players];
+		for(int i = 0; i != Territory.players; i++){
+			Territory.names[i] = Setup.mthis.list[Setup.mthis.list[0].length-Setup.players][i];
 		}
-		float[][] colours = new float[][]{{1f, 1f, 0f}, {0f, 1f, 0f}, {0f, 0f, 1f}, {1f, 0f, 0f}, {0f, 0f, 0f}};
-		Country.colours = new float[Country.players][];
-		for(int i = 0; i != Country.players; i++){
-			Country.colours[i] = colours[i];
+		float[][] colours = new float[][]{{1f, 1f, 0f}, {0f, 1f, 0f}, {0f, 0f, 1f}, {1f, 0f, 0f}, {0f, 0f, 0f}, {0.5f, 0f, 0f}, {0f, 0.5f, 0f}, {0f, 0f, 0.5f}, {0f, 1f, 1f}, {1f, 0f, 1f}, {0.5f, 0.5f, 0f}};
+		Territory.colours = new float[Territory.players][];
+		for(int i = 0; i != Territory.players; i++){
+			Territory.colours[i] = colours[i];
 		}
 		
-		Texture[] images = new Texture[3];
+		Texture[] images = new Texture[1];
 		
 		try {
 			images[0] = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/map.png")));
-			images[1] = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/city.png")));
-			images[2] = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/capital.png")));
+			//images[1] = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/city.png")));
+			//images[2] = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/capital.png")));
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
@@ -105,31 +105,31 @@ public class Init extends Thread{
 	    }
 	    Game.FONTS[3] = FONT;
 	    
-	    Game.mthis.players = new Player[Country.players];
-	    for(int i = 0; i != Country.players; i++){
+	    Game.mthis.players = new Player[Territory.players];
+	    for(int i = 0; i != Territory.players; i++){
 	    	Game.mthis.players[i] = new Player(i);
 	    }
 	    Game.mthis.players[Game.player].player = true;
 	    
-	    Continent[] continents = new Continent[6];
-	    Document doc = IOHandle.readXML("info/continents/continents.xml");
+	    /*Country[] continents = new Country[6];
+	    Document doc = IOHandle.readXML("info/setup/countries.xml");
 		NodeList nodes = doc.getDocumentElement().getChildNodes();
 	    for(int i = 0; i != nodes.getLength(); i++){
 	    	Node node = nodes.item(i);
-	    	Country[] countries = new Country[node.getChildNodes().getLength()];
+	    	Territory[] countries = new Territory[node.getChildNodes().getLength()];
 			for(int i2 = 0; i2 != node.getChildNodes().getLength(); i2++){
 				Node cnode = node.getChildNodes().item(i2);
 				String[] pos = cnode.getAttributes().getNamedItem("pos").getTextContent().split(" ");
-				Country country = new Country(cnode.getAttributes().getNamedItem("name").getTextContent(), Float.parseFloat(pos[0]), Float.parseFloat(pos[1]), i);
+				Territory country = new Territory(cnode.getAttributes().getNamedItem("name").getTextContent(), Float.parseFloat(pos[0]), Float.parseFloat(pos[1]), i);
 				countries[i2] = country;
 			}
-			Continent continent = new Continent(node.getAttributes().getNamedItem("name").getTextContent(), Integer.parseInt(node.getAttributes().getNamedItem("bonus").getTextContent()), countries);
+			Country continent = new Country(node.getAttributes().getNamedItem("name").getTextContent(), Integer.parseInt(node.getAttributes().getNamedItem("bonus").getTextContent()), countries);
 			continents[i] = continent;
 		}
 	    
-	    doc = IOHandle.readXML("info/continents/connections.xml");
+	    doc = IOHandle.readXML("info/setup/connections.xml");
 		nodes = doc.getDocumentElement().getChildNodes();
-		ArrayList<Integer>[] nexts = new ArrayList[Continent.overall.size()];
+		ArrayList<Integer>[] nexts = new ArrayList[Country.overall.size()];
 		for(int i = 0; i != nexts.length; i++){
 			nexts[i] = new ArrayList<Integer>();
 		}
@@ -144,10 +144,10 @@ public class Init extends Thread{
 	    
 	    for(int i = 0; i != nexts.length; i++){
 	    	ArrayList<Integer> array = nexts[i];
-    		Continent.overall.get(i).nextTo = new int[array.size()];
+    		Country.overall.get(i).nextTo = new int[array.size()];
 	    	for(int i2 = 0; i2 != array.size(); i2++){
 	    		//System.out.println("Connecting "+i+" and "+array.get(i2));
-	    		Continent.overall.get(i).nextTo[i2] = array.get(i2);
+	    		Country.overall.get(i).nextTo[i2] = array.get(i2);
 	    	}
 	    }
 	    
@@ -161,18 +161,18 @@ public class Init extends Thread{
 	    		int num = Integer.parseInt(node.getAttributes().getNamedItem("num").getTextContent());
 	    		boolean city = node.getAttributes().getNamedItem("city")!=null;
 	    		boolean capital = node.getAttributes().getNamedItem("capital")!=null;
-	    		Continent.overall.get(id).army = num;
-	    		Continent.overall.get(id).city = city;
-	    		Continent.overall.get(id).owner = i;
-	    		Continent.overall.get(id).origOwner = i;
-	    		Continent.overall.get(id).capital = capital;
-	    		Continent.overall.get(id).done = true;
-	    		Game.mthis.players[i].countries.add(Continent.overall.get(id));
+	    		Country.overall.get(id).army = num;
+	    		Country.overall.get(id).city = city;
+	    		Country.overall.get(id).owner = i;
+	    		Country.overall.get(id).origOwner = i;
+	    		Country.overall.get(id).capital = capital;
+	    		Country.overall.get(id).done = true;
+	    		Game.mthis.players[i].countries.add(Country.overall.get(id));
 	    	}
 		}
 	    
 	    Game.mthis.continents = continents;
-	    
+	    */
 	    int sb = 2;
 	    Game.mthis.buttons = new Button[sb];
 		Game.mthis.buttons[0] = new Button(Setup.WIDTH-Game.FONTS[2].getWidth("Menu"), 0, "Menu", 1, true);
@@ -189,7 +189,7 @@ public class Init extends Thread{
 		
 		int height = 0;
 		int width = 0;
-		String string = "Go : "+Country.names[Game.go];
+		String string = "Go : "+Territory.names[Game.go];
 		Game.FONTS[2].drawString(Game.mthis.translate_x, Game.mthis.translate_y + height, string);
 		height += Game.FONTS[2].getHeight(string);
 		width += Game.FONTS[2].getWidth(string);

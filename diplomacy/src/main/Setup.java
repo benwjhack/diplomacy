@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -26,6 +28,9 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class Setup {
 	
@@ -41,15 +46,15 @@ public class Setup {
 	public Texture purple;
 	public Texture[] images;
 	
-	public static int chosen = -1, players = 3;
+	public static int chosen = -1, players;
 	public static String drawText = "";
-	public String[] list = {"Yellow", "Green", "Blue", "Red", "Black"};
+	public static Integer[][][] choices;
+	public static String[] countries;// = new String[]{"England", "Germany", "Russia", "Turkey", "Austria", "Italy", "France"};
+	public String[][] list;
 	public boolean[] colours;
-	public int[][] text;
-	public String[] texts;
 	public boolean[] colours2;
-	public int[][] text2;
-	public String[] texts2;
+	public int[][] text, text2;
+	public String[] texts, texts2;
 	
 	public int mousex, mousey, translate_x, translate_y;
 	
@@ -77,8 +82,59 @@ public class Setup {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-        
-        setupStrings(new String[]{list[0], list[1], list[2]});
+		
+		Scanner scan = IOHandle.getText("info/setup/countries.txt");
+		ArrayList<String> temp = new ArrayList<String>();
+		while(scan.hasNext()){
+			temp.add(scan.next());
+		}
+		countries = new String[temp.size()];
+		for(int i = 0; i != temp.size(); i++){
+			countries[i] = temp.get(i);
+		}
+		
+		ArrayList<Integer[][]> choices = new ArrayList<Integer[][]>();
+		
+		Document doc = IOHandle.readXML("info/setup/setup.xml");
+		NodeList nodes = doc.getDocumentElement().getChildNodes();
+	    for(int i = 0; i != nodes.getLength(); i++){
+	    	Node node = nodes.item(i);
+	    	NodeList nodes2 = node.getChildNodes();
+	    	ArrayList<Integer[]> choice = new ArrayList<Integer[]>();
+	    	for(int i2 = 0; i2 != nodes2.getLength(); i2++){
+	    		Node node2 = nodes2.item(i2);
+	    		if(node2 == null){continue;}
+	    		Node node3 = node2.getAttributes().getNamedItem("countries");
+	    		String[] temp2 = node3.getTextContent().split(" ");
+	    		choice.add(new Integer[temp2.length]);
+	    		for(int i3 = 0; i3 != temp2.length; i3++){
+	    			choice.get(i2)[i3] = Integer.parseInt(temp2[i3]);
+	    		}
+	    	}
+	    	choices.add(new Integer[choice.size()][]);
+	    	for(int i2 = 0; i2 != choice.size(); i2++){
+	    		choices.get(i)[i2] = choice.get(i2);
+	    	}
+		}
+	    
+	    Setup.choices = new Integer[choices.size()][][];
+	    for(int i = 0; i != choices.size(); i++){
+	    	Setup.choices[i] = choices.get(i);
+	    }
+	    
+	    list = new String[Setup.choices.length][];
+	    for(int i = 0; i != Setup.choices.length; i++){
+	    	list[i] = new String[Setup.choices[i].length];
+	    	for(int i2 = 0; i2 != Setup.choices[i].length; i2++){
+	    		list[i][i2] = "";
+	    		for(int i3 = 0; i3 != Setup.choices[i][i2].length; i3++){
+	    			list[i][i2] += countries[Setup.choices[i][i2][i3]]+(i3==Setup.choices[i][i2].length-1?"":"/");
+	    		}
+	    	}
+	    }
+		
+        setupStrings(list[0].clone());
+        players = list[0].length;
 		
         int size = 30;
         
@@ -112,8 +168,8 @@ public class Setup {
 		
 		texts = newa;
 		if(chosen == -1){
-			chosen = 0;//5-Main.unlocked;
-			texts[0]+="-";
+			chosen = 0;
+			texts[0]+=" -";
 		}
         text = new int[texts.length][];
         colours = new boolean[text.length];
@@ -209,7 +265,7 @@ public class Setup {
 							chosen = i;
 							String[] temp = new String[players];
 							for(int i2=0;i2!=players;i2++){
-								temp[i2] = list[i2]+(i2==chosen?"-":"");
+								temp[i2] = list[list[0].length-players][i2]+(i2==chosen?" -":"");
 							}
 							setupStrings(temp);
 						}
@@ -225,20 +281,19 @@ public class Setup {
 								STATE = 1;
 								drawText = "Generating level...";
 								(new Init()).start();
-								//game = new Game(chosen);
-								//run = game.run();
 								break;
 							case 2:
-								players++;
-								if(players == 6){
-									players = 3;
+								players--;
+								if(players == 1){
+									players = list[0].length;
 								}
-								if(chosen>players){
+								if(chosen>=players){
 									chosen = 0;
 								}
+								System.out.println(chosen+" "+players);
 								String[] temp = new String[players];
 								for(int i2=0;i2!=players;i2++){
-									temp[i2] = list[i2]+(i2==chosen?"-":"");
+									temp[i2] = list[list[0].length-players][i2]+(i2==chosen?" -":"");
 								}
 								setupStrings(temp);
 							}
@@ -304,7 +359,7 @@ public class Setup {
 		
 		for(int i = 0; i != text.length; i++){
 			if(colours[i]){
-				FONT2.drawString(text[i][0], text[i][1], texts[i]+" (tactic "+Player.tactics[i]+")");
+				FONT2.drawString(text[i][0], text[i][1], texts[i]);
 				continue;
 			}
 			FONT.drawString(text[i][0], text[i][1], texts[i]);

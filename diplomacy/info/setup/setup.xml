@@ -1,0 +1,41 @@
+<setup>
+<choice a="0">
+	<player countries="0"/>
+	<player countries="1"/>
+	<player countries="2"/>
+	<player countries="3"/>
+	<player countries="4"/>
+	<player countries="5"/>
+	<player countries="6"/>
+</choice>
+<choice a="1">
+	<player countries="0"></player>
+	<player countries="1"></player>
+	<player countries="2"></player>
+	<player countries="3"></player>
+	<player countries="4"></player>
+	<player countries="6"></player>
+</choice>
+<choice a="2">
+	<player countries="0"></player>
+	<player countries="2"></player>
+	<player countries="3"></player>
+	<player countries="4"></player>
+	<player countries="6"></player>
+</choice>
+<choice a="3">
+	<player countries="0"></player>
+	<player countries="4 6"></player>
+	<player countries="1 3"></player>
+	<player countries="2 5"></player>
+</choice>
+<choice a="4">
+	<player countries="1 4"></player>
+	<player countries="6 2"></player>
+	<player countries="0 3"></player>
+</choice>
+<choice a="5">
+	<player countries="0 2 6"></player>
+	<player countries="1 3 4"></player>
+</choice>
+</setup>
