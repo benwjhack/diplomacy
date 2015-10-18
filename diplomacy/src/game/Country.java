@@ -9,6 +9,7 @@ public class Country {
 	public static float cwidth = 0.04f, cheight = 0.04f;
 	
 	public String name;
+	public boolean uncontrolled = false;
 	public Territory[] territories;
 	
 	public Country(String name, int bonus, Territory[] countries){

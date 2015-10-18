@@ -7,10 +7,10 @@ public class Territory {
 	public static int idCount = 0, players;
 	
 	public String name;
-	public boolean city, capital, done = false;
+	public boolean city, capital, army = false, impassible = false;
 	public float[] pos;
 	public int[] rpos, nextTo;
-	public int id, army, owner, origOwner, continent;
+	public int id, owner, origOwner, continent;
 	
 	public Territory(String name, float x, float y, int continent){
 		this.name = name;
@@ -35,9 +35,6 @@ public class Territory {
 	}
 	
 	public void position(){
-		if(!done){
-			System.out.println(name + " not done!");
-		}
 		this.rpos = new int[]{(int) (pos[0]*Game.iWIDTH), (int) (pos[1]*Game.iHEIGHT)};
 	}
 	

@@ -111,6 +111,34 @@ public class Init extends Thread{
 	    }
 	    Game.mthis.players[Game.player].player = true;
 	    
+	    Document doc = IOHandle.readXML("info/setup/countries.xml");
+	    Node origNode = doc.getDocumentElement();
+	    Country[] countries = new Country[Integer.parseInt(origNode.getAttributes().item(0).getTextContent())];
+	    
+	    for(int i = 0; i != origNode.getChildNodes().getLength(); i++){
+	    	ArrayList<Territory> terrs = new ArrayList<Territory>();
+	    	for(int i2 = 0; i2 != origNode.getChildNodes().item(i).getChildNodes().getLength(); i2++){
+	    		Node node = origNode.getChildNodes().item(i).getChildNodes().item(i2);
+	    		String[] string = node.getAttributes().getNamedItem("pos").getTextContent().split(" ");
+	    		float x = Float.parseFloat(string[0]), y = Float.parseFloat(string[1]);
+	    		terrs.add(new Territory(node.getAttributes().item(0).getTextContent(), x, y, i));
+	    	}
+	    	Territory[] terrs2 = new Territory[terrs.size()];
+	    	for(int i2 = 0; i2 != terrs.size(); i2++){
+	    		terrs2[i2] = terrs.get(i2);
+	    	}
+	    	countries[i] = new Country(origNode.getChildNodes().item(i).getAttributes().getNamedItem("name").getTextContent(), i, terrs2);
+	    	if(origNode.getChildNodes().item(i).getAttributes().getNamedItem("uncontrolled")!=null){
+	    		countries[i].uncontrolled = true;
+	    	}
+	    	if(origNode.getChildNodes().item(i).getAttributes().getNamedItem("colour")!=null){
+	    		String[] string = origNode.getChildNodes().item(i).getAttributes().getNamedItem("colour").getTextContent().split(" ");
+	    		Territory.colours[i] = new float[]{Integer.parseInt(string[0]), Integer.parseInt(string[1]), Integer.parseInt(string[2])};
+	    	}
+	    }
+	    
+	    Game.mthis.countries = countries;
+	    
 	    /*Country[] continents = new Country[6];
 	    Document doc = IOHandle.readXML("info/setup/countries.xml");
 		NodeList nodes = doc.getDocumentElement().getChildNodes();

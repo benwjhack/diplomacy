@@ -41,7 +41,7 @@ public class Game {
 	public int[] selected = new int[]{-1, 0};
 	public Button[] buttons;
 	public Player[] players;
-	public Country[] continents;
+	public Country[] countries;
 	public int mousex, mousey, translate_x = 0, translate_y = 0, mtime = 0;
 	
 	public Game(int country, int number){
@@ -63,7 +63,8 @@ public class Game {
 		
 		iWIDTH = WIDTH * 2;
 		iHEIGHT = HEIGHT * 2;
-		
+
+		System.out.println("Country "+Country.overall.size());
 		for(Territory country: Country.overall){
 			country.position();
 		}
@@ -205,20 +206,20 @@ public class Game {
 		Draw.renderthistex(new Rectangle(0,0,iWIDTH,iHEIGHT), images[0]);
 		
 		boolean trip = false;
-		/*for(Country cont: continents){
+		for(Country cont: countries){
 			for(Territory country: cont.territories){
 				float[] colour = Territory.colours[country.owner];
 				String string = country.name+": "+country.army;
 				int width = FONTS[2].getWidth(string);
 				int height = FONTS[2].getHeight(string);
-				if(!trip && Math.abs(mousex - country.rpos[0]) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
+				if(!country.impassible && !trip && Math.abs(mousex - country.rpos[0]) < width / 2 && Math.abs(mousey - country.rpos[1]) < height / 2){
 					trip = true;
 					FONTS[2].drawString(country.rpos[0] - width / 2, country.rpos[1] - height / 2, string, new Color(255, 255, 255));
 				} else {
 					FONTS[2].drawString(country.rpos[0] - width / 2, country.rpos[1] - height / 2, string, new Color(colour[0], colour[1], colour[2]));
 				}
 			}
-		}*/
+		}
 		
 		Init.drawTop();
 		

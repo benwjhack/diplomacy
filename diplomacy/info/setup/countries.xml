@@ -1,4 +1,20 @@
-<countries>
-<country>
+<countries no="1">
+<country name="uncontrolled" uncontrolled="yes" colour="0 0 0">
+	0<territory name="Greenland" pos="0.21044546 0.084487535" impassible=""/>
+	1<territory name="Norway" pos="0.39631337 0.27146813" supp=""/>
+	2<territory name="Sweden" pos="0.45698926 0.3601108" supp=""/>
+	3<territory name="Denmark" pos="0.39477727 0.42243767" supp=""/>
+	4<territory name="Holland" pos="0.35023043 0.49168974" supp=""/>
+	5<territory name="Belgium" pos="0.32258064 0.56232685" supp=""/>
+	6<territory name="Switz" pos="0.3605469 0.6638889" impassible=""/>
+	7<territory name="Spain" pos="0.10368664 0.7465374" supp=""/>
+	8<territory name="Portugal" pos="0.17281106 0.8130194" supp=""/>
+	9<territory name="North Africa" pos="0.17127496 0.9529086"/>
+	10<territory name="Tunis" pos="0.35867897 0.9806094" supp=""/>
+	11<territory name="Greece" pos="0.54070663 0.88088644" supp=""/>
+	12<territory name="Albania" pos="0.5122888 0.833795"/>
+	13<territory name="Serbia" pos="0.53379416 0.7617729" supp=""/>
+	14<territory name="Bugaria" pos="0.5906298 0.799169" supp=""/>
+	15<territory name="Rumania" pos="0.59984636 0.7105263" supp=""/>
 </country>
 </countries>
