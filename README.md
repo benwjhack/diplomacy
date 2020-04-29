@@ -1,2 +1,4 @@
 # diplomacy
-what am i doing
+A simulator for playing risk (unfinished)
+
+Made while at school
